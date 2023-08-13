@@ -1,12 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { ApiProperty } from '@nestjs/swagger';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity({name:'todos'})
+@Entity({ name: 'todos' })
 export class Todo {
-@PrimaryGeneratedColumn()
-id: Number
+  @PrimaryGeneratedColumn()
+  @ApiProperty()
+  id: number;
 
-
-@Column()
-title:string
-
+  @Column()
+  @ApiProperty()
+  title: string;
 }

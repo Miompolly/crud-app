@@ -6,8 +6,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TodosModule } from './todos/todos.module';
 import { Todo } from './todos/entities/todo.entity';
 import * as dotenv from 'dotenv';
+import { join } from 'path';
 dotenv.config();
-
 
 @Module({
   imports: [
@@ -21,12 +21,12 @@ dotenv.config();
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [Todo],
+        entities: [join(process.cwd(), 'dist/**/*.entity.js')],
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
-    TodosModule
+    TodosModule,
   ],
   controllers: [AppController],
   providers: [AppService],
