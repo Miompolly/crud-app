@@ -16,10 +16,17 @@ export class TodosService {
   async findAll(): Promise<Todo[]> {
     return this.todoRepository.find();
   }
-
-  findById(todoId: number): Todo {
-    return this.todos.find((todo) => todo.id === todoId);
+  async findById(todoId: number): Promise<Todo> {
+    const todo = await this.todoRepository.findOne({ where: { id: todoId } });
+  
+    if (!todo) {
+      throw new NotFoundException(`Todo with id ${todoId} not found`);
+    }
+  
+    return todo;
   }
+  
+  
 
   async create(createTodoDto: CreateTodoDto): Promise<Todo> {
     const newTodo = this.todoRepository.create(createTodoDto);

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Patch, NotFoundException } from '@nestjs/common';
 import { TodosService } from './todos.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { ApiTags } from '@nestjs/swagger';
@@ -22,8 +22,16 @@ export class TodosController {
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Todo> {
-    return this.todosService.findById(+id); 
+    try {
+      return await this.todosService.findById(+id);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error; // Re-throw other errors
+    }
   }
+  
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<void> {
     await this.todosService.remove(+id);
